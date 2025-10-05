@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Waste Classifier — Demo</title>
+  <link rel="stylesheet" href="/static/style.css"/>
+</head>
+<body>
+  <div class="container">
+    <h1>♻️ Clasificador de Residuos — Demo</h1>
+
+    <form id="upload-form">
+      <input type="file" id="image-input" accept="image/*" />
+      <button type="submit">Subir y predecir</button>
+    </form>
+
+    <div id="preview" class="card hidden">
+      <img id="preview-img" src="" alt="preview"/>
+      <div id="result"></div>
+    </div>
+
+    <div id="log"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('upload-form');
+    const fileInput = document.getElementById('image-input');
+    const preview = document.getElementById('preview');
+    const previewImg = document.getElementById('preview-img');
+    const resultDiv = document.getElementById('result');
+    const log = document.getElementById('log');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const file = fileInput.files[0];
+      if (!file) return alert('Selecciona una imagen');
+
+      // preview local
+      previewImg.src = URL.createObjectURL(file);
+      preview.classList.remove('hidden');
+      resultDiv.innerHTML = 'Procesando...';
+
+      const fd = new FormData();
+      fd.append('file', file);
+
+      const resp = await fetch('/predict', { method: 'POST', body: fd });
+      const data = await resp.json();
+
+      if (resp.status !== 200) {
+        resultDiv.innerHTML = `<b>Error:</b> ${data.error || 'Unknown'}`;
+        return;
+      }
+
+      const top1 = data.top1;
+      const topk = data.topk;
+      let html = `<h2>Predicción: <span class="label">${top1.class} (${(top1.prob*100).toFixed(1)}%)</span></h2>`;
+      html += '<ul>';
+      topk.forEach(it => {
+        html += `<li>${it.class}: ${(it.prob*100).toFixed(2)}%</li>`;
+      });
+      html += '</ul>';
+      resultDiv.innerHTML = html;
+      log.innerText = JSON.stringify(data.all_probs, null, 2);
+    });
+  </script>
+</body>
+</html>

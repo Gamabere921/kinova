@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🚀 Space Waste Classifier</title>
+
+  <!-- Forzamos recarga de CSS en desarrollo -->
+  <link rel="stylesheet" href="/static/space2.css?v=5">
+
+  <!-- Librería Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- Fondo estrellado (NO interfiere con el contenido) -->
+  <div class="stars"></div>
+
+  <!-- Contenedor principal (Sidebar + Contenido) -->
+  <div class="main-wrapper">
+    
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <h2>♻️ Materials Info</h2>
+      <ul id="materialMenu">
+        <li data-material="glass">Glass</li>
+        <li data-material="paper">Paper</li>
+        <li data-material="cardboard">Cardboard</li>
+        <li data-material="plastic">Plastic</li>
+        <li data-material="metal">Metal</li>
+        <li data-material="trash">Trash</li>
+      </ul>
+      <div id="materialInfo">
+        <h3>✨ Select a material</h3>
+        <p>Click on any material to see recycling tips.</p>
+      </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="container-box">
+      <h1>🚀 Space Waste Classifier</h1>
+
+      <!-- Tarjeta de subida -->
+      <div class="upload-card">
+        <label for="fileInput" class="upload-label">Choose an image</label>
+        <input id="fileInput" type="file" accept="image/*" hidden>
+        <div id="preview-container">
+          <img id="preview" src="" alt="Preview" />
+        </div>
+        <button id="predictBtn" disabled>Predict</button>
+      </div>
+
+      <!-- Resultados -->
+      <div id="result" class="hidden">
+        <h2>Prediction Result</h2>
+        <p id="top1"></p>
+        <canvas id="chart"></canvas>
+      </div>
+
+      <!-- Loader -->
+      <div id="loader" class="hidden">🚀 Analyzing...</div>
+    </div>
+
+  </div> <!-- fin de main-wrapper -->
+
+  <!-- Script JS -->
+  <script src="/static/space.js?v=5"></script>
+</body>
+</html>

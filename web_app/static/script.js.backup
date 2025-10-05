@@ -1,0 +1,75 @@
+const fileInput = document.getElementById("fileInput");
+const preview = document.getElementById("preview");
+const predictBtn = document.getElementById("predictBtn");
+const loader = document.getElementById("loader");
+const resultDiv = document.getElementById("result");
+const top1 = document.getElementById("top1");
+
+let chart = null;
+
+// Preview de imagen
+fileInput.addEventListener("change", () => {
+  const file = fileInput.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      preview.src = e.target.result;
+      predictBtn.disabled = false;
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+// Predict
+predictBtn.addEventListener("click", async () => {
+  const file = fileInput.files[0];
+  if (!file) return;
+
+  loader.classList.remove("hidden");
+  resultDiv.classList.add("hidden");
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const res = await fetch("/predict", {
+      method: "POST",
+      body: formData
+    });
+    const data = await res.json();
+
+    loader.classList.add("hidden");
+    resultDiv.classList.remove("hidden");
+
+    top1.innerHTML = `Top prediction: <strong>${data.top1.class}</strong> (${(data.top1.prob*100).toFixed(2)}%)`;
+
+    // Gráfico de barras con todas las clases
+    const labels = Object.keys(data.all_probs);
+    const probs = Object.values(data.all_probs).map(p => (p * 100).toFixed(2));
+
+    if (chart) chart.destroy();
+    chart = new Chart(document.getElementById("chart"), {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [{
+          label: "Probability (%)",
+          data: probs,
+          backgroundColor: "#4CAF50"
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, max: 100 }
+        }
+      }
+    });
+
+  } catch (err) {
+    loader.classList.add("hidden");
+    alert("Error analyzing the image");
+    console.error(err);
+  }
+});

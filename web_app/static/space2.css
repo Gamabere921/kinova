@@ -1,0 +1,120 @@
+body, .main-wrapper, .sidebar, .container-box  {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #0b0f19;
+  color: #e0e6f5;
+  overflow: hidden;
+}
+
+/* Contenedor principal */
+.main-wrapper {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background: rgba(20, 25, 45, 0.9);
+  padding: 20px;
+  box-shadow: 4px 0 15px rgba(0,0,0,0.6);
+  border-right: 2px solid #76c7f0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* 👈 permite hacer scroll si hay mucho contenido */
+  scrollbar-width: thin; /* (opcional) hace más discreta la barra */
+}
+
+/* Contenedor principal del contenido */
+.container-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* centrado vertical */
+  align-items: center; /* centrado horizontal */
+  padding: 40px;
+  overflow-y: auto;
+  text-align: center;
+  min-height: 0; /* 👈 evita conflictos con el flex */
+}
+
+/* Fondo de estrellas */
+.stars {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+  animation: twinkle 200s linear infinite;
+  opacity: 0.4;
+  pointer-events: none; /* 👈 evita bloquear clics */
+  z-index: 0;
+}
+
+@keyframes twinkle {
+  from { background-position: 0 0; }
+  to { background-position: 10000px 10000px; }
+}
+
+h1 {
+  color: #76c7f0;
+  margin-bottom: 20px;
+  text-shadow: 0 0 15px #76c7f0;
+}
+
+/* Card */
+.upload-card {
+  border: 2px dashed #76c7f0;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background: rgba(255,255,255,0.05);
+  box-shadow: 0 0 20px rgba(118,199,240,0.3);
+  width: 100%;
+  max-width: 400px; /* tamaño controlado */
+}
+
+.upload-label {
+  background: #76c7f0;
+  color: black;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: bold;
+}
+
+#preview {
+  max-width: 100%;
+  max-height: 60vh;
+  margin-top: 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(118,199,240,0.8);
+  object-fit: contain;
+}
+
+button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border: none;
+  background: linear-gradient(45deg, #ff4081, #f50057);
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: bold;
+}
+
+button:hover:not(:disabled) {
+  background: linear-gradient(45deg, #f50057, #ff1744);
+  transform: scale(1.1);
+}
+
+.hidden {
+  display: none;
+}
